@@ -30,8 +30,8 @@ fetch(
     let r2 = `${b.slice((b.indexOf('-', 7)+1), (b.indexOf('-', 7)+3))} ${fMonth} ${b.slice(0, 4)}`;
     document.querySelector(".date").innerHTML = r2;
     document.querySelector(".slogan").innerHTML = data.Headline.Text;
-    document.querySelector(".weather1").innerHTML = 'Min: '+((data.DailyForecasts[0].Temperature.Minimum.Value -32)/1.8).toFixed(1)+'&#8451';
-    document.querySelector(".weather2").innerHTML = 'Max: '+((data.DailyForecasts[0].Temperature.Maximum.Value -32)/1.8).toFixed(1)+'&#8451';
+    document.querySelector(".temperature-1").innerHTML = 'Min: '+((data.DailyForecasts[0].Temperature.Minimum.Value -32)/1.8).toFixed(1)+'&#8451';
+    document.querySelector(".temperature-2").innerHTML = 'Max: '+((data.DailyForecasts[0].Temperature.Maximum.Value -32)/1.8).toFixed(1)+'&#8451';
     document.querySelector(".image").src = `https://www.accuweather.com/images/weathericons/${data.DailyForecasts[0].Day.Icon}.svg`;
     document.querySelector(".word").innerHTML = data.DailyForecasts[0].Day.IconPhrase;
     document.querySelector(".button-primary").href = data.Headline.Link;

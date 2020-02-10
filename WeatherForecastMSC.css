@@ -64,7 +64,11 @@ body, html {
     margin-bottom: 5%;
     font-size: 3vh;
 }
-
+.temperature{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .cloudy{
     margin-top: 5%;
     width: 100%;
