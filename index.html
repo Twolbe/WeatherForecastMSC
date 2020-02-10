@@ -4,29 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>WeatherForecastWidget</title>
     <link rel="stylesheet" href="WeatherForecastMSC.css" />
   </head>
    <body>
     <div class="container">
-      <div class="town"></div>
-      <div class="date"></div>
-      <div class="slogan"></div>
+      <div class="location-name"></div>
+      <div class="required-date"></div>
+      <div class="warning-text"></div>
       <div class="weather">
-        <div class="temperature">
-          <p class="temperature-1"></p>
-          <p class="temperature-2"></p>
+        <div class="weather_temperature">
+          <p class="weather_temperature__min"></p>
+          <p class="weather_temperature__max"></p>
         </div>
-        <div class="cloudy">
-          <p class="word"></p>
+        <div class="weather_sky-condition">
+          <p class="weather_sky-condition__text"></p>
           <img
-            class="image"
-            src="https://wallpaperstock.net/minimal-skull-and-crossbones-wallpapers_15302_2560x1440.jpg"
+            class="weather_sky-condition__image"
+            src=""
+            alt=""
           />
         </div>
       </div>
-      <div class="button">
-        <a class="button-primary" href="" alt="">Go</a>
+      <div class="source-button">
+        <a class="source-button_link" href="">Source</a>
       </div>
     </div>
 

@@ -1,114 +1,123 @@
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-body, html {
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+body,
+html {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: white;
 }
 .container {
-    width: 50%;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    font-family: Century Gothic;
-    
-}
-.town{
-    width: 100%;
-    height: 33%;
-    display: flex;
-    position: relative;
-    justify-content:center;
-    flex-direction: column;
-    align-items: center;
-    font-size: 5vh;
-    text-shadow: 1px 1px 2px #4CAF50;
-    
-}
-.date {
-    width: 100%;
-    height: 33%;
-    display: flex;
-    position: relative;
-    justify-content:center;
-    flex-direction: column;
-    align-items: center;
-    font-size: large;
-    font-size: 3vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center; 
+  width: 50%;
+  height: 80%;
+  font-family: Century Gothic;
 }
 
-.slogan {
-    text-align: center;
-    color: #4CAF50;
-    text-shadow: 1px 1px 2px #4CAF50;
-    font-size: 3vh;
-}
-.weather{
-    width: 100%;
-    height: 34%;
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    justify-content:space-between;
-    align-items: center;
-    font-family: Century Gothic;
-    margin-top: 5%;
-    margin-bottom: 5%;
-    font-size: 3vh;
-}
-.temperature{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.cloudy{
-    margin-top: 5%;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    position: relative;
-    justify-content:center;
-    align-items: center;
-    flex-direction: column;
-}
-.button {
-    height: 34%;
-    display: flex;
-    position: relative;
-    justify-content:flex-end;
-    align-items: flex-end;  
-}
-.button-primary {
-    display: block;
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-}
-.button-primary:hover {
-   
-    background-color: rgb(45, 122, 47); /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-}
-img {
-    height: 15vh; 
-    width: 15vh;
+.location-name {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 33%;
+  font-size: 5vh;
+  text-shadow: 1px 1px 2px #4caf50;
 }
 
+.required-date {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 33%;
+  font-size: large;
+  font-size: 3vh;
+}
 
+.warning-text {
+  text-align: center;
+  color: #4caf50;
+  text-shadow: 1px 1px 2px #4caf50;
+  font-size: 3vh;
+}
+
+.weather {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 34%;
+  font-size: 3vh;
+  font-family: Century Gothic;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  
+}
+.weather_temperature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.weather_sky-condition {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin-top: 5%;
+}
+.weather_sky-condition__image {
+  display: none;
+}
+
+.ok-for-image {
+  display: block;
+  height: 15vh;
+  width: 15vh;
+}
+
+.source-button {
+  height: 34%;
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.source-button_link {
+  display: none;
+}
+.ok-for-button {
+  display: block;
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 2vh;
+}
+.ok-for-button:hover {
+  background-color: rgb(45, 122, 47); /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 2vh;
+}

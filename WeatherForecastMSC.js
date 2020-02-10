@@ -1,73 +1,63 @@
-fetch(
-  "http://dataservice.accuweather.com/forecasts/v1/daily/5day/294021?apikey=Js77Hj5gXif9X6SWS2hGUYkrNk3gouaL"
-)
-  .then(response => response.json())
-  .then(function(data) {
-    console.log(data);
-    let a = data.Headline.Link;
-    let ab = a.indexOf('/', 30);
-    let ac = a.indexOf('/', 35);
-    let r = a.slice((ab+1), (ac)).toUpperCase();
-    document.querySelector(".town").innerHTML = r;
+fetch ("http://dataservice.accuweather.com/forecasts/v1/daily/5day/294021?apikey=Js77Hj5gXif9X6SWS2hGUYkrNk3gouaL")
+  .then (response => 
+    response.json())
+  .then (function (forecastData) {
+    
+    /*Получаем название населенного пункта из ссылки на данные-->*/
+    let locationName = forecastData.Headline.Link; 
+    let locationNameStart = locationName.indexOf('/', 30);
+    let locationNameEnd = locationName.indexOf('/', 35);
+    locationName = locationName.slice( 
+        (locationNameStart + 1), (locationNameEnd) 
+        ).toUpperCase();
+    document.querySelector(".location-name").innerHTML = locationName;
 
-    let b = data.DailyForecasts[0].Date;
-    let Month =  b.slice((b.indexOf('-', 4)+1), (b.indexOf('-', 4)+3));
-    let fMonth;
-    switch (Month) {
-        case '01': fMonth = 'January'; break;
-        case '02': fMonth = 'February'; break;
-        case '03': fMonth = 'March'; break;
-        case '04': fMonth = 'April'; break;
-        case '05': fMonth = 'May'; break;
-        case '06': fMonth = 'June'; break;
-        case '07': fMonth = 'July'; break;
-        case '08': fMonth = 'August'; break;
-        case '09': fMonth = 'September'; break;
-        case '10': fMonth = 'October'; break;
-        case '11': fMonth = 'November'; break;
-        case '12': fMonth = 'December'; break;
+    /*Обрабатываем форму даты-->*/
+    let requiredDate = forecastData.DailyForecasts[0].Date;
+    let numberOfMonth =  requiredDate.slice( 
+        (requiredDate.indexOf('-', 4) + 1 ), (requiredDate.indexOf('-', 4) + 3 ) 
+        );
+    switch (numberOfMonth) {
+        case '01': strOfMonth = 'January'; break;
+        case '02': strOfMonth = 'February'; break;
+        case '03': strOfMonth = 'March'; break;
+        case '04': strOfMonth = 'April'; break;
+        case '05': strOfMonth = 'May'; break;
+        case '06': strOfMonth = 'June'; break;
+        case '07': strOfMonth = 'July'; break;
+        case '08': strOfMonth = 'August'; break;
+        case '09': strOfMonth = 'September'; break;
+        case '10': strOfMonth = 'October'; break;
+        case '11': strOfMonth = 'November'; break;
+        case '12': strOfMonth = 'December'; break;
     }
-    let r2 = `${b.slice((b.indexOf('-', 7)+1), (b.indexOf('-', 7)+3))} ${fMonth} ${b.slice(0, 4)}`;
-    document.querySelector(".date").innerHTML = r2;
-    document.querySelector(".slogan").innerHTML = data.Headline.Text;
-    document.querySelector(".temperature-1").innerHTML = 'Min: '+((data.DailyForecasts[0].Temperature.Minimum.Value -32)/1.8).toFixed(1)+'&#8451';
-    document.querySelector(".temperature-2").innerHTML = 'Max: '+((data.DailyForecasts[0].Temperature.Maximum.Value -32)/1.8).toFixed(1)+'&#8451';
-    document.querySelector(".image").src = `https://www.accuweather.com/images/weathericons/${data.DailyForecasts[0].Day.Icon}.svg`;
-    document.querySelector(".word").innerHTML = data.DailyForecasts[0].Day.IconPhrase;
-    document.querySelector(".button-primary").href = data.Headline.Link;
+    requiredDate = `${requiredDate.slice(
+                        (requiredDate.indexOf('-', 7) + 1), (requiredDate.indexOf('-', 7) + 3))} 
+                    ${strOfMonth} 
+                    ${requiredDate.slice(0, 4)}`;
+    document.querySelector(".required-date").innerHTML = requiredDate;
+    
+    document.querySelector(".warning-text").innerHTML = forecastData.Headline.Text; 
+    document.querySelector(".weather_temperature__min").innerHTML = 'Min: '+((forecastData.DailyForecasts[0].Temperature.Minimum.Value -32)/1.8).toFixed(1)+'&#8451'; 
+    document.querySelector(".weather_temperature__max").innerHTML = 'Max: '+((forecastData.DailyForecasts[0].Temperature.Maximum.Value -32)/1.8).toFixed(1)+'&#8451';
+    document.querySelector(".weather_sky-condition__text").innerHTML = forecastData.DailyForecasts[0].Day.IconPhrase;
+    
+    /*Скрываем изображение на случай неудачного соединения-->*/
+    let imageConectError = document.querySelector(".weather_sky-condition__image");
+        imageConectError.classList.add("ok-for-image");
+        document.querySelector(".weather_sky-condition__image").src = `https://www.accuweather.com/images/weathericons/${forecastData.DailyForecasts[0].Day.Icon}.svg`;
+    
+    /*Скрываем кнопку на случай неудачного соединения-->*/
+    let gobuttonConectError = document.querySelector(".source-button_link");
+        gobuttonConectError.classList.add("ok-for-button");
+        document.querySelector(".source-button_link").href = forecastData.Headline.Link;
  })
+
   .catch(function() {
-    // catch ane errors
+    console.log('sry');
   });
 
   
 
   
-
-//PROTOTYPE
-// const person = new Object({
-//     name: 'Maxim',
-//     age: 25,
-//     greet: function() {
-//         console.log('Greet!')
-//     }
-// })
-
-// Object.prototype.sayHello = function () {
-//     console.log('Hello!')
-// }
-
-// const lena = Object.create(person);
-// lena.name = 'Elena';
-
-// function hello() {
-//     console.log('Hello', this)
-// }
-
-// const person = {
-//     name: 'Gurami',
-//     age: 25,
-//     sayHello: hello,
-//     sayHelloWindow: hello.bind(this)
-// }
 
