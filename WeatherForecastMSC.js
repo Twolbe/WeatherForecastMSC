@@ -1,63 +1,63 @@
-fetch ("http://dataservice.accuweather.com/forecasts/v1/daily/5day/294021?apikey=Js77Hj5gXif9X6SWS2hGUYkrNk3gouaL")
-  .then (response => 
-    response.json())
-  .then (function (forecastData) {
-    
-    /*Получаем название населенного пункта из ссылки на данные-->*/
-    let locationName = forecastData.Headline.Link; 
-    let locationNameStart = locationName.indexOf('/', 30);
-    let locationNameEnd = locationName.indexOf('/', 35);
-    locationName = locationName.slice( 
-        (locationNameStart + 1), (locationNameEnd) 
-        ).toUpperCase();
-    document.querySelector(".location-name").innerHTML = locationName;
+fetch ("http://dataservice.accuweather.com/forecasts/v1/daily/5day/294021?apikey=Js77Hj5gXif9X6SWS2hGUYkrNk3gouaL") 
+    .then (forecastData => forecastData.json())
+    .then (function (forecastData) {
+        innerCity (forecastData, '.location-name');
+        innerDateinRightForm(forecastData,  '.required-date');                  
+        innerWarningText (forecastData, ".warning-text");
+        innerWeatherTempMinMax(forecastData, ".weather_temperature__min", ".weather_temperature__max");
+        innerSkyCondition(forecastData, ".weather_sky-condition__text");
+        imageConectError (forecastData, ".weather_sky-condition__image", "ok-for-image", ".source-button_link", "ok-for-button");
+    })
 
-    /*Обрабатываем форму даты-->*/
-    let requiredDate = forecastData.DailyForecasts[0].Date;
-    let numberOfMonth =  requiredDate.slice( 
-        (requiredDate.indexOf('-', 4) + 1 ), (requiredDate.indexOf('-', 4) + 3 ) 
-        );
-    switch (numberOfMonth) {
-        case '01': strOfMonth = 'January'; break;
-        case '02': strOfMonth = 'February'; break;
-        case '03': strOfMonth = 'March'; break;
-        case '04': strOfMonth = 'April'; break;
-        case '05': strOfMonth = 'May'; break;
-        case '06': strOfMonth = 'June'; break;
-        case '07': strOfMonth = 'July'; break;
-        case '08': strOfMonth = 'August'; break;
-        case '09': strOfMonth = 'September'; break;
-        case '10': strOfMonth = 'October'; break;
-        case '11': strOfMonth = 'November'; break;
-        case '12': strOfMonth = 'December'; break;
+function innerCity (data, elemCityClass) {
+    function getCity () {
+        return data.Headline.Link.slice( 
+            (data.Headline.Link.indexOf('/', 32)+1), 
+            (data.Headline.Link.indexOf('/', 33)) 
+            ).toUpperCase();}
+        document.querySelector(elemCityClass).innerHTML = getCity ();
+}
+            
+function innerDateinRightForm (data, elemDateClass) {        
+    function getNumberOfMonth () {
+        return parseInt(data.DailyForecasts[0].Date.slice( 
+                        (data.DailyForecasts[0].Date.indexOf('-', 4) + 1 ), (data.DailyForecasts[0].Date.indexOf('-', 4) + 3 ))
+                        );
     }
-    requiredDate = `${requiredDate.slice(
-                        (requiredDate.indexOf('-', 7) + 1), (requiredDate.indexOf('-', 7) + 3))} 
-                    ${strOfMonth} 
-                    ${requiredDate.slice(0, 4)}`;
-    document.querySelector(".required-date").innerHTML = requiredDate;
-    
-    document.querySelector(".warning-text").innerHTML = forecastData.Headline.Text; 
-    document.querySelector(".weather_temperature__min").innerHTML = 'Min: '+((forecastData.DailyForecasts[0].Temperature.Minimum.Value -32)/1.8).toFixed(1)+'&#8451'; 
-    document.querySelector(".weather_temperature__max").innerHTML = 'Max: '+((forecastData.DailyForecasts[0].Temperature.Maximum.Value -32)/1.8).toFixed(1)+'&#8451';
-    document.querySelector(".weather_sky-condition__text").innerHTML = forecastData.DailyForecasts[0].Day.IconPhrase;
-    
-    /*Скрываем изображение на случай неудачного соединения-->*/
-    let imageConectError = document.querySelector(".weather_sky-condition__image");
-        imageConectError.classList.add("ok-for-image");
-        document.querySelector(".weather_sky-condition__image").src = `https://www.accuweather.com/images/weathericons/${forecastData.DailyForecasts[0].Day.Icon}.svg`;
-    
-    /*Скрываем кнопку на случай неудачного соединения-->*/
-    let gobuttonConectError = document.querySelector(".source-button_link");
-        gobuttonConectError.classList.add("ok-for-button");
-        document.querySelector(".source-button_link").href = forecastData.Headline.Link;
- })
+    function getNameOfMonth() {
+        return `${data.DailyForecasts[0].Date.slice(
+                (data.DailyForecasts[0].Date.indexOf('-', 7) + 1), (data.DailyForecasts[0].Date.indexOf('-', 7) + 3))} 
+                ${monthArray[(getNumberOfMonth()-1)]} 
+                ${data.DailyForecasts[0].Date.slice(0, 4)}`;
+    }
+    document.querySelector(elemDateClass).innerHTML = getNameOfMonth();
+}
+            
+function innerWarningText (data, elemWarnTextClass) {
+    document.querySelector(elemWarnTextClass).innerHTML = data.Headline.Text;
+}
+            
+function innerWeatherTempMinMax (data, elemTempMinClass, elemTempMaxClass) {
+    function tr() {
+        return ((data.DailyForecasts[0].Temperature.Minimum.Value -32)/1.8).toFixed(1);
+    }
+        document.querySelector(elemTempMinClass).innerHTML = 'Min: '+ tr() +'&#8451'; 
+        document.querySelector(elemTempMaxClass).innerHTML = 'Max: '+ tr() +'&#8451';
+}
 
-  .catch(function() {
-    console.log('sry');
-  });
+function innerSkyCondition (data, elemSkyCondClass) {
+    document.querySelector(elemSkyCondClass).innerHTML = data.DailyForecasts[0].Day.IconPhrase;
+}
 
-  
+function imageConectError (data, initialClassImage, changedClassImage, initialClassButton, changedClassButton) {
+    let getClassToUPD = document.querySelector(initialClassImage);
+        getClassToUPD.classList.add(changedClassImage);
+        document.querySelector(initialClassImage).src = 
+        `https://www.accuweather.com/images/weathericons/${data.DailyForecasts[0].Day.Icon}.svg`;
+        getClassToUPD = document.querySelector(initialClassButton);
+        getClassToUPD.classList.add(changedClassButton); 
+}            
 
-  
-
+monthArray =    ['January', 'February', 'March', 
+                'April', 'May', 'June', 'July', 'August', 
+                'September', 'October', 'November', 'December'];
