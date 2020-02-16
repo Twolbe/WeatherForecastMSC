@@ -1,63 +1,45 @@
-fetch ("http://dataservice.accuweather.com/forecasts/v1/daily/5day/294021?apikey=Js77Hj5gXif9X6SWS2hGUYkrNk3gouaL") 
-    .then (forecastData => forecastData.json())
-    .then (function (forecastData) {
-        innerCity (forecastData, '.location-name');
-        innerDateinRightForm(forecastData,  '.required-date');                  
-        innerWarningText (forecastData, ".warning-text");
-        innerWeatherTempMinMax(forecastData, ".weather_temperature__min", ".weather_temperature__max");
-        innerSkyCondition(forecastData, ".weather_sky-condition__text");
-        imageConectError (forecastData, ".weather_sky-condition__image", "ok-for-image", ".source-button_link", "ok-for-button");
+const CITY_NAME_SELECTOR = ".location-name";
+const DATE_SELECTOR = ".required-date";
+const WARNING_SELECTOR = ".warning-text";
+const TEMP_MIN_SELECTOR = ".weather_temperature__min";
+const TEMP_MAX_SELECTOR = ".weather_temperature__max";
+const SKY_CONDITION_SELECTOR = ".weather_sky-condition__text";
+const IMAGE_SELECTOR = ".weather_sky-condition__image"
+const BUTTON_SELECTOR = ".source-button_link"
+const SHOW_BUTTON_SELECTOR = "ok-for-button";
+const SHOW_IMAGE_SELECTOR = "ok-for-image";
+
+fetch('http://dataservice.accuweather.com/forecasts/v1/daily/5day/294021?apikey=Js77Hj5gXif9X6SWS2hGUYkrNk3gouaL')
+    .then(forecastData => forecastData.json())
+    .then(function (forecastData) {
+        document.querySelector(CITY_NAME_SELECTOR).innerHTML = transformCityName(forecastData.Headline.Link);
+        document.querySelector(DATE_SELECTOR).innerHTML = transformDate(forecastData.DailyForecasts[0].Date);
+        document.querySelector(WARNING_SELECTOR).innerHTML = forecastData.Headline.Text;
+        document.querySelector(TEMP_MIN_SELECTOR).innerHTML = 'Min: ' + transformTempToCelcium(forecastData.DailyForecasts[0].Temperature.Minimum.Value) + '&#8451';
+        document.querySelector(TEMP_MAX_SELECTOR).innerHTML = 'Max: ' + transformTempToCelcium(forecastData.DailyForecasts[0].Temperature.Maximum.Value) + '&#8451';
+        document.querySelector(SKY_CONDITION_SELECTOR).innerHTML = forecastData.DailyForecasts[0].Day.IconPhrase;
+        hideCSSClass(IMAGE_SELECTOR, SHOW_IMAGE_SELECTOR, forecastData.DailyForecasts[0].Day.Icon);
+        hideCSSClass(BUTTON_SELECTOR, SHOW_BUTTON_SELECTOR);
     })
 
-function innerCity (data, elemCityClass) {
-    function getCity () {
-        return data.Headline.Link.slice( 
-            (data.Headline.Link.indexOf('/', 32)+1), 
-            (data.Headline.Link.indexOf('/', 33)) 
-            ).toUpperCase();}
-        document.querySelector(elemCityClass).innerHTML = getCity ();
-}
-            
-function innerDateinRightForm (data, elemDateClass) {        
-    function getNumberOfMonth () {
-        return parseInt(data.DailyForecasts[0].Date.slice( 
-                        (data.DailyForecasts[0].Date.indexOf('-', 4) + 1 ), (data.DailyForecasts[0].Date.indexOf('-', 4) + 3 ))
-                        );
-    }
-    function getNameOfMonth() {
-        return `${data.DailyForecasts[0].Date.slice(
-                (data.DailyForecasts[0].Date.indexOf('-', 7) + 1), (data.DailyForecasts[0].Date.indexOf('-', 7) + 3))} 
-                ${monthArray[(getNumberOfMonth()-1)]} 
-                ${data.DailyForecasts[0].Date.slice(0, 4)}`;
-    }
-    document.querySelector(elemDateClass).innerHTML = getNameOfMonth();
-}
-            
-function innerWarningText (data, elemWarnTextClass) {
-    document.querySelector(elemWarnTextClass).innerHTML = data.Headline.Text;
-}
-            
-function innerWeatherTempMinMax (data, elemTempMinClass, elemTempMaxClass) {
-    function tr() {
-        return ((data.DailyForecasts[0].Temperature.Minimum.Value -32)/1.8).toFixed(1);
-    }
-        document.querySelector(elemTempMinClass).innerHTML = 'Min: '+ tr() +'&#8451'; 
-        document.querySelector(elemTempMaxClass).innerHTML = 'Max: '+ tr() +'&#8451';
+function transformCityName(cityName) {
+    return cityName.slice(
+        (cityName.indexOf('/', 32) + 1),
+        (cityName.indexOf('/', 33))
+    ).toUpperCase();
 }
 
-function innerSkyCondition (data, elemSkyCondClass) {
-    document.querySelector(elemSkyCondClass).innerHTML = data.DailyForecasts[0].Day.IconPhrase;
+function transformDate(date) {
+    let dateObj = new Date(date);
+    return Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(dateObj);
 }
 
-function imageConectError (data, initialClassImage, changedClassImage, initialClassButton, changedClassButton) {
-    let getClassToUPD = document.querySelector(initialClassImage);
-        getClassToUPD.classList.add(changedClassImage);
-        document.querySelector(initialClassImage).src = 
-        `https://www.accuweather.com/images/weathericons/${data.DailyForecasts[0].Day.Icon}.svg`;
-        getClassToUPD = document.querySelector(initialClassButton);
-        getClassToUPD.classList.add(changedClassButton); 
-}            
+function transformTempToCelcium(tempValue) {
+    return ((tempValue - 32) / 1.8).toFixed(1);
+}
 
-monthArray =    ['January', 'February', 'March', 
-                'April', 'May', 'June', 'July', 'August', 
-                'September', 'October', 'November', 'December'];
+function hideCSSClass(initialClass, newClass, link) {
+    let getClassToUpdate = document.querySelector(initialClass);
+    getClassToUpdate.classList.add(newClass);
+    document.querySelector(initialClass).src = `https://www.accuweather.com/images/weathericons/${link}.svg`;
+}
