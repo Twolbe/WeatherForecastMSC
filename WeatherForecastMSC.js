@@ -12,15 +12,28 @@ const SHOW_IMAGE_SELECTOR = "ok-for-image";
 fetch('http://dataservice.accuweather.com/forecasts/v1/daily/5day/294021?apikey=Js77Hj5gXif9X6SWS2hGUYkrNk3gouaL')
     .then(forecastData => forecastData.json())
     .then(function (forecastData) {
-        document.querySelector(CITY_NAME_SELECTOR).innerHTML = transformCityName(forecastData.Headline.Link);
-        document.querySelector(DATE_SELECTOR).innerHTML = transformDate(forecastData.DailyForecasts[0].Date);
-        document.querySelector(WARNING_SELECTOR).innerHTML = forecastData.Headline.Text;
-        document.querySelector(TEMP_MIN_SELECTOR).innerHTML = 'Min: ' + transformTempToCelcium(forecastData.DailyForecasts[0].Temperature.Minimum.Value) + '&#8451';
-        document.querySelector(TEMP_MAX_SELECTOR).innerHTML = 'Max: ' + transformTempToCelcium(forecastData.DailyForecasts[0].Temperature.Maximum.Value) + '&#8451';
-        document.querySelector(SKY_CONDITION_SELECTOR).innerHTML = forecastData.DailyForecasts[0].Day.IconPhrase;
-        hideCSSClass(IMAGE_SELECTOR, SHOW_IMAGE_SELECTOR, forecastData.DailyForecasts[0].Day.Icon);
-        hideCSSClass(BUTTON_SELECTOR, SHOW_BUTTON_SELECTOR);
+        const DAILY_FORECASTS = forecastData.DailyForecasts[0];
+        const HEADLINE = forecastData.Headline;
+        fillElement (CITY_NAME_SELECTOR, transformCityName(HEADLINE.Link));
+        fillElement (WARNING_SELECTOR, HEADLINE.Text);
+        fillElement (DATE_SELECTOR, transformDate(DAILY_FORECASTS.Date)); 
+        fillElement (
+            TEMP_MIN_SELECTOR, 
+            'Min: ' + transformTempToCelcium(DAILY_FORECASTS.Temperature.Minimum.Value) + '&#8451'
+        );
+        fillElement (
+            TEMP_MAX_SELECTOR, 
+            'Max: ' + transformTempToCelcium(DAILY_FORECASTS.Temperature.Maximum.Value) + '&#8451'
+        );
+        fillElement (SKY_CONDITION_SELECTOR, DAILY_FORECASTS.Day.IconPhrase);
+        hideCSSClass (IMAGE_SELECTOR, SHOW_IMAGE_SELECTOR, DAILY_FORECASTS.Day.Icon);
+        hideCSSClass (BUTTON_SELECTOR, SHOW_BUTTON_SELECTOR);
+        
     })
+
+function fillElement (selector, content) {
+    document.querySelector(selector).innerHTML = content;
+}
 
 function transformCityName(cityName) {
     return cityName.slice(
